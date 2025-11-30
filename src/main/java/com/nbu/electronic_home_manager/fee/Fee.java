@@ -1,0 +1,43 @@
+package com.nbu.electronic_home_manager.fee;
+
+import com.nbu.electronic_home_manager.apartment.Apartment;
+import com.nbu.electronic_home_manager.payment.Payment;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.Month;
+import java.time.Year;
+import java.util.UUID;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "fees")
+public class Fee {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Enumerated(EnumType.STRING)
+    private Month month;
+
+    private Year year;
+
+    private BigDecimal baseAmount;
+
+    private BigDecimal elevatorFee;
+
+    private BigDecimal petFee;
+
+    private BigDecimal totalAmount;
+
+    @ManyToOne
+    @JoinColumn(name = "apartment_id")
+    private Apartment apartment;
+
+    @OneToOne(mappedBy = "fee")
+    private Payment payment;
+}

@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: Electronic_Home_Manager
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/electronic_home_manager?createDatabaseIfNotExist=true
+    username: root
+    password: 1234
+
+logging:
+  level:
+    org.hibernate.tool.schema: ERROR
