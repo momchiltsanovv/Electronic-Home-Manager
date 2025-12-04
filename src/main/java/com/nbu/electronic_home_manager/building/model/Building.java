@@ -1,8 +1,8 @@
-package com.nbu.electronic_home_manager.building;
+package com.nbu.electronic_home_manager.building.model;
 
 import com.nbu.electronic_home_manager.apartment.model.Apartment;
-import com.nbu.electronic_home_manager.company.Company;
-import com.nbu.electronic_home_manager.employee.Employee;
+import com.nbu.electronic_home_manager.company.model.Company;
+import com.nbu.electronic_home_manager.employee.model.Employee;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

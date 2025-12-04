@@ -1,4 +1,4 @@
-package com.nbu.electronic_home_manager.resident;
+package com.nbu.electronic_home_manager.resident.model;
 
 import com.nbu.electronic_home_manager.apartment.model.Apartment;
 import jakarta.persistence.*;

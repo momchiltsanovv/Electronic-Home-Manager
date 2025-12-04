@@ -1,9 +1,9 @@
-package com.nbu.electronic_home_manager.apartment;
+package com.nbu.electronic_home_manager.apartment.model;
 
-import com.nbu.electronic_home_manager.building.Building;
-import com.nbu.electronic_home_manager.fee.Fee;
-import com.nbu.electronic_home_manager.resident.Person;
-import com.nbu.electronic_home_manager.resident.Pet;
+import com.nbu.electronic_home_manager.building.model.Building;
+import com.nbu.electronic_home_manager.fee.model.Fee;
+import com.nbu.electronic_home_manager.resident.model.Resident;
+import com.nbu.electronic_home_manager.resident.model.Pet;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +41,7 @@ public class Apartment {
     // Business rule: Each apartment has exactly one owner
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private Person owner;
+    private Resident owner;
 
     // MANY-TO-MANY: Multiple residents per apartment, one person can live in multiple apartments
     // This side owns the relationship - creates the join table
@@ -54,7 +54,7 @@ public class Apartment {
             joinColumns = @JoinColumn(name = "apartment_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id")
     )
-    private Set<Person> residents;
+    private Set<Resident> residents;
 
     // ONE-TO-MANY: One apartment can have many pets
     @OneToMany(mappedBy = "apartment")
