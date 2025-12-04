@@ -1,12 +1,13 @@
 package com.nbu.electronic_home_manager.building;
 
-import com.nbu.electronic_home_manager.apartment.Apartment;
+import com.nbu.electronic_home_manager.apartment.model.Apartment;
 import com.nbu.electronic_home_manager.company.Company;
 import com.nbu.electronic_home_manager.employee.Employee;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,14 +38,34 @@ public class Building {
 
     private Boolean hasElevator;
 
+    // Fee structure for this building
+    @Column(nullable = false)
+    private BigDecimal pricePerSquareMeter;
+
+    @Column(nullable = false)
+    private BigDecimal elevatorFeePerPerson;
+
+    @Column(nullable = false)
+    private BigDecimal petFeePerPet;
+
+    // MANY-TO-ONE: Many buildings are managed by one employee
+    // This side owns the relationship - foreign key is stored here
+    // Creates "employee_id" column in buildings table
+    // Business rule: Each building has exactly one assigned employee
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
+    // MANY-TO-ONE: Many buildings belong to one company
+    // This side owns the relationship - foreign key is stored here
+    // Creates "company_id" column in buildings table
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 
+    // ONE-TO-MANY: One building contains many apartments
+    // The "building" field in Apartment entity owns this relationship
+    // Foreign key "building_id" is stored in the apartments table
     @OneToMany(mappedBy = "building")
     private Set<Apartment> apartments;
 }

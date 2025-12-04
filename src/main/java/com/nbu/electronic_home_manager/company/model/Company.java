@@ -36,9 +36,15 @@ public class Company {
 
     private BigDecimal totalRevenue;
 
+    // ONE-TO-MANY: One company manages many buildings
+    // The "company" field in Building entity owns this relationship
+    // Foreign key "company_id" is stored in the buildings table
     @OneToMany(mappedBy = "company")
     private Set<Building> buildings;
 
+    // ONE-TO-MANY: One company employs many employees
+    // The "company" field in Employee entity owns this relationship
+    // Foreign key "company_id" is stored in the employees table
     @OneToMany(mappedBy = "company")
     private Set<Employee> employees;
 

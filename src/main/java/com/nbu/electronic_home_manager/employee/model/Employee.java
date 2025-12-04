@@ -40,10 +40,17 @@ public class Employee {
     @CreationTimestamp
     private LocalDate hiredDate;
 
+    // MANY-TO-ONE: Many employees belong to one company
+    // This side owns the relationship - foreign key is stored here
+    // Creates "company_id" column in employees table
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 
+    // ONE-TO-MANY: One employee is assigned to manage many buildings
+    // The "employee" field in Building entity owns this relationship
+    // Foreign key "employee_id" is stored in the buildings table
+    // Business rule: Each building is managed by exactly one employee
     @OneToMany(mappedBy = "employee")
     private Set<Building> assignedBuildings;
 }

@@ -30,20 +30,24 @@ public class Apartment {
     @Column(nullable = false, updatable = false)
     private Double area;
 
+    // MANY-TO-ONE: Many apartments belong to one building
     @ManyToOne
     @JoinColumn(name = "building_id")
     private Building building;
 
-    // Multiple owners per apartment
-    @ManyToMany
-    @JoinTable(
-            name = "apartment_owners",
-            joinColumns = @JoinColumn(name = "apartment_id"),
-            inverseJoinColumns = @JoinColumn(name = "person_id")
-    )
-    private Set<Person> owners;
+    // MANY-TO-ONE: Many apartments can have one owner, one person can own multiple apartments
+    // This side owns the relationship - foreign key is stored here
+    // Creates "owner_id" column in apartments table
+    // Business rule: Each apartment has exactly one owner
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private Person owner;
 
-    // Multiple residents per apartment
+    // MANY-TO-MANY: Multiple residents per apartment, one person can live in multiple apartments
+    // This side owns the relationship - creates the join table
+    // Creates junction table "apartment_residents" with columns: apartment_id, person_id
+    // Business case: Family members, roommates, people with multiple residences
+    // Note: The owner might not live in the apartment (rental property)
     @ManyToMany
     @JoinTable(
             name = "apartment_residents",
@@ -52,9 +56,11 @@ public class Apartment {
     )
     private Set<Person> residents;
 
+    // ONE-TO-MANY: One apartment can have many pets
     @OneToMany(mappedBy = "apartment")
     private Set<Pet> pets;
 
+    // ONE-TO-MANY: One apartment generates many fees (monthly fees over time)
     @OneToMany(mappedBy = "apartment")
     private Set<Fee> fees;
 }
