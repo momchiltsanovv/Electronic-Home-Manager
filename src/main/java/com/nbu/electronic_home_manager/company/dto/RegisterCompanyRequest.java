@@ -10,5 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 public class RegisterCompanyRequest {
 
+   private String name;
+   private String id;
+
 
 }

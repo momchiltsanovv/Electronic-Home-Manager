@@ -8,4 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EditCompanyRequest {
+    private String name;
+    private String id;
+
 }

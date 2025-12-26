@@ -23,7 +23,7 @@ public class CompanyService {
         Company company;
 
 
-        companyRepository.save(company);
+//        companyRepository.save(company);
     }
 
 
@@ -31,7 +31,7 @@ public class CompanyService {
         Company company;
 
 
-        companyRepository.save(company);
+//        companyRepository.save(company);
 
     }
 
@@ -39,7 +39,7 @@ public class CompanyService {
         Company company;
 
 
-        companyRepository.save();
+//        companyRepository.save();
     }
 
 
