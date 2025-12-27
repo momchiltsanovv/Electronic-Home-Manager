@@ -2,13 +2,25 @@ package com.nbu.electronic_home_manager.company.controller;
 
 import com.nbu.electronic_home_manager.company.dto.EditCompanyRequest;
 import com.nbu.electronic_home_manager.company.dto.RegisterCompanyRequest;
+import com.nbu.electronic_home_manager.company.service.CompanyService;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/company")
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/company")
 public class CompanyController {
+
+    private final CompanyService companyService;
+
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
 
     @PostMapping("/creation")
     public void makeCompany(@Valid RegisterCompanyRequest request,
@@ -18,18 +30,21 @@ public class CompanyController {
             throw new IllegalArgumentException("Incorrect data for creating company");
         }
 
-        System.out.println("uspeshno registrirana companiq");
+        companyService.createCompany(request);
 
     }
 
     @PostMapping("/details")
     public void editCompany(EditCompanyRequest request) {
 
+        //Todo implement edit company
 
     }
 
     @PostMapping("/deletion")
-    public void deleteCompany() {
+    public void deleteCompany(@RequestParam UUID companyId) {
+
+        companyService.deleteCompany(companyId);
 
     }
 

@@ -3,9 +3,9 @@ package com.nbu.electronic_home_manager.company.model;
 import com.nbu.electronic_home_manager.building.model.Building;
 import com.nbu.electronic_home_manager.employee.model.Employee;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,6 +14,9 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "companies")
 public class Company {
@@ -36,6 +39,12 @@ public class Company {
 
     private BigDecimal totalRevenue;
 
+    @CreationTimestamp
+    private LocalDate createdDate;
+
+    @UpdateTimestamp
+    private LocalDate updatedDate;
+
     // ONE-TO-MANY: One company manages many buildings
     // The "company" field in Building entity owns this relationship
     // Foreign key "company_id" is stored in the buildings table
@@ -48,6 +57,4 @@ public class Company {
     @OneToMany(mappedBy = "company")
     private Set<Employee> employees;
 
-    @CreationTimestamp
-    private LocalDate createdDate;
 }
