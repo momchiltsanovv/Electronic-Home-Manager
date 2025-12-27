@@ -6,8 +6,11 @@ import com.nbu.electronic_home_manager.employee.model.Employee;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
@@ -47,6 +50,12 @@ public class Building {
 
     @Column(nullable = false)
     private BigDecimal petFeePerPet;
+
+    @CreationTimestamp
+    private LocalDate createdDate;
+
+    @UpdateTimestamp
+    private LocalDate updatedDate;
 
     // MANY-TO-ONE: Many buildings are managed by one employee
     // This side owns the relationship - foreign key is stored here
