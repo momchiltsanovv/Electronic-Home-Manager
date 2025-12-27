@@ -4,7 +4,7 @@ import com.nbu.electronic_home_manager.company.dto.EditCompanyRequest;
 import com.nbu.electronic_home_manager.company.dto.RegisterCompanyRequest;
 import com.nbu.electronic_home_manager.company.model.Company;
 import com.nbu.electronic_home_manager.company.repository.CompanyRepository;
-import com.nbu.electronic_home_manager.exception.CompanyNotFoundException;
+import com.nbu.electronic_home_manager.exception.CompanyDoesNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +48,7 @@ public class CompanyService {
         Optional<Company> optionalCompany = companyRepository.findById(companyId);
 
         if (optionalCompany.isEmpty()) {
-            throw new CompanyNotFoundException("No such company exists");
+            throw new CompanyDoesNotExistException("No such company exists");
         }
 
         companyRepository.delete(optionalCompany.get());

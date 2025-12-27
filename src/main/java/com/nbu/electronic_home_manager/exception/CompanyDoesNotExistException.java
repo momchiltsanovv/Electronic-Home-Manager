@@ -1,8 +1,8 @@
 package com.nbu.electronic_home_manager.exception;
 
-public class CompanyNotFoundException extends RuntimeException {
+public class CompanyDoesNotExistException extends RuntimeException {
 
-    public CompanyNotFoundException(String noSuchCompanyExists) {
+    public CompanyDoesNotExistException(String noSuchCompanyExists) {
         super(noSuchCompanyExists);
     }
 }
