@@ -29,7 +29,7 @@ public class BuildingController {
                             BindingResult result) {
 
         if(result.hasErrors()) {
-            throw new IllegalArgumentException("Incorrect data for creating company");
+            throw new IllegalArgumentException("Incorrect data for creating building");
         }
 
         buildingService.createBuilding(request);
