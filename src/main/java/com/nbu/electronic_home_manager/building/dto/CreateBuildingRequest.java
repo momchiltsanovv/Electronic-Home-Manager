@@ -1,5 +1,6 @@
 package com.nbu.electronic_home_manager.building.dto;
 
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -19,28 +20,34 @@ public class CreateBuildingRequest {
     @Size(min = 5, message = "Building address must be at least 5 characters")
     private String address;
 
+    @NotNull
     @Positive(message = "floors must be a positive integer")
     private Integer floors;
 
+    @NotNull
     @Positive(message = "apartments must be a positive integer")
     private Integer totalApartments;
 
-
-    @Positive(message = "builtArea must be a positive integer")
+    @NotNull
+    @Positive(message = "builtArea must be a positive number")
     private Double builtArea;
 
-    @Positive(message = "common areas must be a positive integer")
+    @NotNull
+    @Positive(message = "common areas must be a positive number")
     private Double commonAreas;
 
     @NotNull
     private Boolean hasElevator;
 
+    @NotNull
     @Positive(message = "price must be a positive number")
     private BigDecimal pricePerSquareMeter;
 
-    @Positive(message = "elevator fee must be positive number")
+    @NotNull
+    @DecimalMin(value = "0.0", inclusive = true, message = "elevator fee must be zero or positive")
     private BigDecimal elevatorFeePerPerson;
 
+    @NotNull
     @Positive(message = "pet fee must be positive number")
     private BigDecimal petFeePerPet;
 

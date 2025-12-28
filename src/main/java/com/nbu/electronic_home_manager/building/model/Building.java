@@ -41,6 +41,7 @@ public class Building {
     @Column(nullable = false, updatable = false)
     private Double commonAreas;
 
+    @Column(updatable = false)
     private Boolean hasElevator;
 
     // Fee structure for this building
