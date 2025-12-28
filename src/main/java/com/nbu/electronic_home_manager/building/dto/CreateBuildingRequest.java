@@ -1,6 +1,7 @@
 package com.nbu.electronic_home_manager.building.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -31,6 +32,7 @@ public class CreateBuildingRequest {
     @Positive(message = "common areas must be a positive integer")
     private Double commonAreas;
 
+    @NotNull
     private Boolean hasElevator;
 
     @Positive(message = "price must be a positive number")

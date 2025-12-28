@@ -36,12 +36,33 @@ public class CompanyService {
     }
 
 
-    public void editCompany(EditCompanyRequest request) {
-        Company company;
+    public void editCompany(UUID companyId, EditCompanyRequest request) {
+        Optional<Company> optionalCompany = companyRepository.findById(companyId);
 
+        if (optionalCompany.isEmpty()) {
+            throw new CompanyDoesNotExistException("No such company exists");
+        }
 
-        //        companyRepository.save(company);
+        Company company = optionalCompany.get();
 
+        if (request.getName() != null && !request.getName().isBlank()) {
+            company.setName(request.getName());
+        }
+
+        if (request.getPhone() != null && !request.getPhone().isBlank()) {
+            company.setPhone(request.getPhone());
+        }
+
+        if (request.getAddress() != null && !request.getAddress().isBlank()) {
+            company.setAddress(request.getAddress());
+        }
+
+        if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            company.setEmail(request.getEmail());
+        }
+
+        companyRepository.save(company);
+        log.info("Company with id {} has been updated", companyId);
     }
 
     public void deleteCompany(UUID companyId) {
