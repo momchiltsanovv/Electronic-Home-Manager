@@ -8,7 +8,7 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
