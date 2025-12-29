@@ -1,6 +1,8 @@
 package com.nbu.electronic_home_manager.resident.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
@@ -8,31 +10,24 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterResidentRequest {
+public class EditResidentRequest {
 
-    @NotBlank
     @Size(min = 2, message = "First name must be at least 2 characters long")
     private String firstName;
 
-    @NotBlank
     @Size(min = 2, message = "Last name must be at least 2 characters long")
     private String lastName;
 
-    @NotNull
     @Positive(message = "Age must be a positive integer")
     private Integer age;
 
-    @NotBlank
     @Size(min = 10, max = 10, message = "Phone number must be exactly 10 characters")
     private String phone;
 
-    @NotBlank
-    @Email
+    @Email(message = "Email must be valid")
     private String email;
 
-    @NotNull
     private Boolean usesElevator;
 
-
-
 }
+
