@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -51,10 +52,8 @@ public class CreateBuildingRequest {
     @Positive(message = "pet fee must be positive number")
     private BigDecimal petFeePerPet;
 
-
-
-
-
+    @NotNull
+    private UUID companyId;
 
 
 
