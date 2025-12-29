@@ -125,7 +125,7 @@ public class EmployeeService {
                 // Find employee with minimum number of buildings
                 Employee newEmployee = otherEmployees.stream()
                                                      .min(Comparator.comparingInt(emp -> emp.getAssignedBuildings().size()))
-                                                     .orElse(otherEmployees.get(0)); // Fallback to first employee
+                                                     .orElse(otherEmployees.getFirst()); // Fallback to first employee
 
                 building.setEmployee(newEmployee);
                 buildingRepository.save(building);

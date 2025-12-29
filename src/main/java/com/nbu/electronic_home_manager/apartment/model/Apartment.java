@@ -5,14 +5,16 @@ import com.nbu.electronic_home_manager.fee.model.Fee;
 import com.nbu.electronic_home_manager.resident.model.Resident;
 import com.nbu.electronic_home_manager.resident.model.Pet;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "apartments")
 public class Apartment {
@@ -38,9 +40,9 @@ public class Apartment {
     // MANY-TO-ONE: Many apartments can have one owner, one person can own multiple apartments
     // This side owns the relationship - foreign key is stored here
     // Creates "owner_id" column in apartments table
-    // Business rule: Each apartment has exactly one owner
+    // Business rule: Each apartment can have one owner (nullable - assigned later)
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", nullable = true)
     private Resident owner;
 
     // MANY-TO-MANY: Multiple residents per apartment, one person can live in multiple apartments

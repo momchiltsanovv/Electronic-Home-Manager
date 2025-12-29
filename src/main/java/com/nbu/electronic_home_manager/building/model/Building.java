@@ -36,10 +36,10 @@ public class Building {
     private Integer totalApartments;
 
     @Column(nullable = false, updatable = false)
-    private Double builtArea;   //in m2
+    private Double builtArea;
 
     @Column(nullable = false, updatable = false)
-    private Double commonAreas;//in m2
+    private Double commonAreas;
 
     @Column(updatable = false)
     private Boolean hasElevator;

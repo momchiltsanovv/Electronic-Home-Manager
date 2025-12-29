@@ -1,6 +1,8 @@
 package com.nbu.electronic_home_manager.building.service;
 
 
+import com.nbu.electronic_home_manager.apartment.model.Apartment;
+import com.nbu.electronic_home_manager.apartment.repository.ApartmentRepository;
 import com.nbu.electronic_home_manager.building.dto.CreateBuildingRequest;
 import com.nbu.electronic_home_manager.building.dto.EditBuildingRequest;
 import com.nbu.electronic_home_manager.building.model.Building;
@@ -16,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -28,13 +32,16 @@ public class BuildingService {
     private final BuildingRepository buildingRepository;
     private final CompanyRepository companyRepository;
     private final EmployeeRepository employeeRepository;
+    private final ApartmentRepository apartmentRepository;
 
     public BuildingService(BuildingRepository buildingRepository,
                           CompanyRepository companyRepository,
-                          EmployeeRepository employeeRepository) {
+                          EmployeeRepository employeeRepository,
+                          ApartmentRepository apartmentRepository) {
         this.buildingRepository = buildingRepository;
         this.companyRepository = companyRepository;
         this.employeeRepository = employeeRepository;
+        this.apartmentRepository = apartmentRepository;
     }
 
     @Transactional
@@ -73,8 +80,48 @@ public class BuildingService {
                                     .build();
 
         buildingRepository.save(building);
-        log.info("Building created at address: {} and assigned to employee: {} {}", 
-                request.getAddress(), assignedEmployee.getFirstName(), assignedEmployee.getLastName());
+        
+        // Automatically create apartments for this building
+        createApartmentsForBuilding(building);
+        
+        log.info("Building created at address: {} with {} apartments, assigned to employee: {} {}", 
+                request.getAddress(), request.getTotalApartments(), assignedEmployee.getFirstName(), assignedEmployee.getLastName());
+    }
+    
+    private void createApartmentsForBuilding(Building building) {
+        int totalApartments = building.getTotalApartments();
+        int floors = building.getFloors();
+        double usableArea = building.getBuiltArea() - building.getCommonAreas();
+        double areaPerApartment = usableArea / totalApartments;
+        
+        // Calculate apartments per floor (distribute evenly)
+        int apartmentsPerFloor = totalApartments / floors;
+        int remainder = totalApartments % floors;
+        
+        Set<Apartment> apartments = new HashSet<>();
+        int apartmentNumber = 1;
+        
+        for (int floor = 1; floor <= floors; floor++) {
+            // Distribute remainder apartments to lower floors
+            int apartmentsOnThisFloor = apartmentsPerFloor + (floor <= remainder ? 1 : 0);
+            
+            for (int i = 0; i < apartmentsOnThisFloor; i++) {
+                Apartment apartment = Apartment.builder()
+                        .number(apartmentNumber)
+                        .floor(floor)
+                        .area(areaPerApartment)
+                        .building(building)
+                        .owner(null) // Owner will be assigned later
+                        .residents(new HashSet<>()) // Residents will be assigned later
+                        .build();
+                
+                apartments.add(apartment);
+                apartmentNumber++;
+            }
+        }
+        
+        apartmentRepository.saveAll(apartments);
+        log.info("Created {} apartments automatically for building at {}", totalApartments, building.getAddress());
     }
 
     public void editBuilding(UUID buildingId, EditBuildingRequest request) {

@@ -3,6 +3,8 @@ package com.nbu.electronic_home_manager.resident.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @Builder
@@ -33,6 +35,10 @@ public class RegisterResidentRequest {
     @NotNull
     private Boolean usesElevator;
 
+    @NotNull
+    private UUID buildingId;
 
+    @NotNull
+    private UUID apartmentId;
 
 }

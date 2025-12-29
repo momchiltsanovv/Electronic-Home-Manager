@@ -1,5 +1,8 @@
 package com.nbu.electronic_home_manager.resident.service;
 
+import com.nbu.electronic_home_manager.apartment.model.Apartment;
+import com.nbu.electronic_home_manager.apartment.repository.ApartmentRepository;
+import com.nbu.electronic_home_manager.exception.ApartmentDoesNotExistException;
 import com.nbu.electronic_home_manager.exception.ResidentDoesNotExistException;
 import com.nbu.electronic_home_manager.resident.dto.EditResidentRequest;
 import com.nbu.electronic_home_manager.resident.dto.RegisterResidentRequest;
@@ -7,7 +10,9 @@ import com.nbu.electronic_home_manager.resident.model.Resident;
 import com.nbu.electronic_home_manager.resident.repository.ResidentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,11 +21,15 @@ import java.util.UUID;
 public class ResidentService {
 
     private final ResidentRepository residentRepository;
+    private final ApartmentRepository apartmentRepository;
 
-    public ResidentService(ResidentRepository residentRepository) {
+    public ResidentService(ResidentRepository residentRepository,
+                          ApartmentRepository apartmentRepository) {
         this.residentRepository = residentRepository;
+        this.apartmentRepository = apartmentRepository;
     }
 
+    @Transactional
     public void createResident(RegisterResidentRequest request) {
         Resident resident = Resident.builder()
                 .firstName(request.getFirstName())
@@ -33,6 +42,33 @@ public class ResidentService {
 
         residentRepository.save(resident);
         log.info("Resident created: {} {}", request.getFirstName(), request.getLastName());
+
+        // Assign resident to apartment (required)
+        assignResidentToApartment(resident, request.getBuildingId(), request.getApartmentId());
+    }
+
+    private void assignResidentToApartment(Resident resident, UUID buildingId, UUID apartmentId) {
+        Optional<Apartment> optionalApartment = apartmentRepository.findByIdAndBuildingId(apartmentId, buildingId);
+
+        if (optionalApartment.isEmpty()) {
+            throw new ApartmentDoesNotExistException(
+                    "Apartment with id " + apartmentId + " does not exist in building " + buildingId);
+        }
+
+        Apartment apartment = optionalApartment.get();
+
+        // Initialize residents set if null
+        if (apartment.getResidents() == null) {
+            apartment.setResidents(new HashSet<>());
+        }
+
+        // Add resident to apartment
+        apartment.getResidents().add(resident);
+        apartmentRepository.save(apartment);
+
+        log.info("Resident {} {} assigned to apartment {} in building {}", 
+                resident.getFirstName(), resident.getLastName(), 
+                apartment.getNumber(), apartment.getBuilding().getAddress());
     }
 
     public void editResident(UUID residentId, EditResidentRequest request) {
