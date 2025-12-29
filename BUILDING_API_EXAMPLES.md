@@ -20,7 +20,8 @@ Assuming your application runs on `http://localhost:8080`
   "hasElevator": true,
   "pricePerSquareMeter": 1500.00,
   "elevatorFeePerPerson": 25.50,
-  "petFeePerPet": 15.00
+  "petFeePerPet": 15.00,
+  "companyId": "550e8400-e29b-41d4-a716-446655440000"
 }
 ```
 
@@ -35,7 +36,8 @@ Assuming your application runs on `http://localhost:8080`
   "hasElevator": false,
   "pricePerSquareMeter": 1200.00,
   "elevatorFeePerPerson": 0.00,
-  "petFeePerPet": 12.00
+  "petFeePerPet": 12.00,
+  "companyId": "550e8400-e29b-41d4-a716-446655440000"
 }
 ```
 
@@ -52,7 +54,8 @@ curl -X POST http://localhost:8080/buildings/creation \
     "hasElevator": true,
     "pricePerSquareMeter": 1500.00,
     "elevatorFeePerPerson": 25.50,
-    "petFeePerPet": 15.00
+    "petFeePerPet": 15.00,
+    "companyId": "550e8400-e29b-41d4-a716-446655440000"
   }'
 ```
 
@@ -66,6 +69,9 @@ curl -X POST http://localhost:8080/buildings/creation \
 - `pricePerSquareMeter`: Required, must be a positive number
 - `elevatorFeePerPerson`: Required, must be zero or positive (0.00 for buildings without elevator)
 - `petFeePerPet`: Required, must be a positive number
+- `companyId`: Required, must be a valid UUID of an existing company
+
+**Important:** When a building is created, it is **automatically assigned** to the employee with the **least number of buildings** from the specified company. If the company has no employees, the creation will fail.
 
 **Note:** The following fields cannot be updated after creation (they are immutable):
 - address
@@ -181,21 +187,35 @@ curl -X DELETE http://localhost:8080/buildings/550e8400-e29b-41d4-a716-446655440
 
 ## Quick Test Sequence
 
-1. **Create a building:**
+1. **First, create a company (if you don't have one):**
+```bash
+curl -X POST http://localhost:8080/companies/creation \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test Company","phone":"1234567890","address":"123 Test St","email":"test@company.com"}'
+```
+
+2. **Create an employee for the company:**
+```bash
+curl -X POST http://localhost:8080/employees/creation \
+  -H "Content-Type: application/json" \
+  -d '{"firstName":"John","lastName":"Doe","phone":"1234567890","email":"john@company.com","salary":5000.00,"companyId":"YOUR-COMPANY-UUID-HERE"}'
+```
+
+3. **Create a building (will be automatically assigned to employee with least buildings):**
 ```bash
 curl -X POST http://localhost:8080/buildings/creation \
   -H "Content-Type: application/json" \
-  -d '{"address":"123 Test Street, Sofia","floors":4,"totalApartments":16,"builtArea":2000.00,"commonAreas":400.00,"hasElevator":true,"pricePerSquareMeter":1400.00,"elevatorFeePerPerson":20.00,"petFeePerPet":10.00}'
+  -d '{"address":"123 Test Street, Sofia","floors":4,"totalApartments":16,"builtArea":2000.00,"commonAreas":400.00,"hasElevator":true,"pricePerSquareMeter":1400.00,"elevatorFeePerPerson":20.00,"petFeePerPet":10.00,"companyId":"YOUR-COMPANY-UUID-HERE"}'
 ```
 
-2. **Note the UUID from the database or logs, then update it:**
+4. **Note the UUID from the database or logs, then update it:**
 ```bash
 curl -X PUT http://localhost:8080/buildings/YOUR-UUID-HERE \
   -H "Content-Type: application/json" \
   -d '{"pricePerSquareMeter":1500.00}'
 ```
 
-3. **Delete the building:**
+5. **Delete the building:**
 ```bash
 curl -X DELETE http://localhost:8080/buildings/YOUR-UUID-HERE
 ```

@@ -3,8 +3,7 @@ package com.nbu.electronic_home_manager.employee.model;
 import com.nbu.electronic_home_manager.building.model.Building;
 import com.nbu.electronic_home_manager.company.model.Company;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -14,6 +13,9 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "employees")
 public class Employee {
