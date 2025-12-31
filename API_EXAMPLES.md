@@ -187,6 +187,58 @@ DELETE /apartments/{id}
 
 ---
 
+## Fees
+
+**Note:** Fees are calculated automatically based on:
+- Base amount: `apartment.area * building.pricePerSquareMeter`
+- Elevator fee: `count(residents age > 7 AND usesElevator) * building.elevatorFeePerPerson` (only if building has elevator)
+- Pet fee: `count(pets) * building.petFeePerPet`
+- Total: `baseAmount + elevatorFee + petFee`
+
+### Create Fee
+```bash
+POST /fees/creation
+```
+```json
+{
+  "apartmentId": "660e8400-e29b-41d4-a716-446655440001",
+  "month": "JANUARY",
+  "year": 2024
+}
+```
+
+### Mark Fee as Paid
+```bash
+PUT /fees/{id}/pay
+```
+```json
+{
+  "paidDate": "2024-01-15"
+}
+```
+
+### Get Fees by Apartment
+```bash
+GET /fees/apartment/{apartmentId}
+```
+
+### Get Fees by Building
+```bash
+GET /fees/building/{buildingId}
+```
+
+### Get Fee by ID
+```bash
+GET /fees/{id}
+```
+
+### Delete Fee
+```bash
+DELETE /fees/{id}
+```
+
+---
+
 ## Quick cURL Examples
 
 ### Company
@@ -227,5 +279,29 @@ curl -X GET http://localhost:8080/employees/by-company/COMPANY_UUID/buildings
 curl -X PUT http://localhost:8080/apartments/APARTMENT_UUID \
   -H "Content-Type: application/json" \
   -d '{"ownerId":"RESIDENT_UUID","residentIds":["RESIDENT_UUID"]}'
+```
+
+### Create Fee
+```bash
+curl -X POST http://localhost:8080/fees/creation \
+  -H "Content-Type: application/json" \
+  -d '{"apartmentId":"APARTMENT_UUID","month":"JANUARY","year":2024}'
+```
+
+### Mark Fee as Paid
+```bash
+curl -X PUT http://localhost:8080/fees/FEE_UUID/pay \
+  -H "Content-Type: application/json" \
+  -d '{"paidDate":"2024-01-15"}'
+```
+
+### Get Fees by Apartment
+```bash
+curl -X GET http://localhost:8080/fees/apartment/APARTMENT_UUID
+```
+
+### Get Fees by Building
+```bash
+curl -X GET http://localhost:8080/fees/building/BUILDING_UUID
 ```
 
