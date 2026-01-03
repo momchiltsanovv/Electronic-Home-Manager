@@ -6,6 +6,7 @@ import com.nbu.electronic_home_manager.company.model.Company;
 import com.nbu.electronic_home_manager.company.repository.CompanyRepository;
 import com.nbu.electronic_home_manager.employee.dto.BuildingInfoResponse;
 import com.nbu.electronic_home_manager.employee.dto.EditEmployeeRequest;
+import com.nbu.electronic_home_manager.employee.dto.EmployeeResponse;
 import com.nbu.electronic_home_manager.employee.dto.EmployeeWithBuildingsResponse;
 import com.nbu.electronic_home_manager.employee.dto.RegisterEmployeeRequest;
 import com.nbu.electronic_home_manager.employee.model.Employee;
@@ -187,8 +188,45 @@ public class EmployeeService {
                                    .elevatorFeePerPerson(building.getElevatorFeePerPerson())
                                    .petFeePerPet(building.getPetFeePerPet())
                                    .createdDate(building.getCreatedDate())
-                                   .updatedDate(building.getUpdatedDate())
-                                   .build();
+                                    .updatedDate(building.getUpdatedDate())
+                                    .build();
+    }
+
+    public List<EmployeeResponse> getAllEmployees(String sortBy) {
+        List<Employee> employees = employeeRepository.findAll();
+        
+        List<EmployeeResponse> responses = employees.stream()
+                .map(employee -> {
+                    int servicedPropertiesCount = employee.getAssignedBuildings() != null 
+                            ? employee.getAssignedBuildings().size() 
+                            : 0;
+                    return EmployeeResponse.builder()
+                            .id(employee.getId())
+                            .firstName(employee.getFirstName())
+                            .lastName(employee.getLastName())
+                            .phone(employee.getPhone())
+                            .email(employee.getEmail())
+                            .salary(employee.getSalary())
+                            .hiredDate(employee.getHiredDate())
+                            .servicedPropertiesCount(servicedPropertiesCount)
+                            .build();
+                })
+                .collect(Collectors.toList());
+        
+        // Sort by name or number of serviced properties
+        if ("name".equalsIgnoreCase(sortBy) || "name_asc".equalsIgnoreCase(sortBy)) {
+            responses.sort(Comparator.comparing((EmployeeResponse e) -> 
+                    (e.getFirstName() + " " + e.getLastName()).toLowerCase()));
+        } else if ("name_desc".equalsIgnoreCase(sortBy)) {
+            responses.sort(Comparator.comparing((EmployeeResponse e) -> 
+                    (e.getFirstName() + " " + e.getLastName()).toLowerCase(), Comparator.reverseOrder()));
+        } else if ("properties".equalsIgnoreCase(sortBy) || "properties_asc".equalsIgnoreCase(sortBy)) {
+            responses.sort(Comparator.comparing(EmployeeResponse::getServicedPropertiesCount));
+        } else if ("properties_desc".equalsIgnoreCase(sortBy)) {
+            responses.sort(Comparator.comparing(EmployeeResponse::getServicedPropertiesCount, Comparator.reverseOrder()));
+        }
+        
+        return responses;
     }
 }
 

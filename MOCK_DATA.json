@@ -1,0 +1,436 @@
+{
+  "companies": [
+    {
+      "name": "Acme Property Management",
+      "phone": "1234567890",
+      "address": "123 Business Park, Sofia, Bulgaria",
+      "email": "contact@acme.com"
+    },
+    {
+      "name": "Global Real Estate Services",
+      "phone": "0987654321",
+      "address": "456 Corporate Avenue, Plovdiv, Bulgaria",
+      "email": "info@globalrealestate.com"
+    },
+    {
+      "name": "Premium Housing Solutions",
+      "phone": "1122334455",
+      "address": "789 Financial District, Varna, Bulgaria",
+      "email": "support@premiumhousing.bg"
+    }
+  ],
+  "employees": [
+    {
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "phone": "1111111111",
+      "email": "alice.johnson@acme.com",
+      "salary": 5000.00,
+      "companyIndex": 0
+    },
+    {
+      "firstName": "Bob",
+      "lastName": "Smith",
+      "phone": "2222222222",
+      "email": "bob.smith@acme.com",
+      "salary": 5500.00,
+      "companyIndex": 0
+    },
+    {
+      "firstName": "Carol",
+      "lastName": "Williams",
+      "phone": "3333333333",
+      "email": "carol.williams@acme.com",
+      "salary": 5200.00,
+      "companyIndex": 0
+    },
+    {
+      "firstName": "David",
+      "lastName": "Brown",
+      "phone": "4444444444",
+      "email": "david.brown@globalrealestate.com",
+      "salary": 5800.00,
+      "companyIndex": 1
+    },
+    {
+      "firstName": "Emma",
+      "lastName": "Davis",
+      "phone": "5555555555",
+      "email": "emma.davis@globalrealestate.com",
+      "salary": 5400.00,
+      "companyIndex": 1
+    },
+    {
+      "firstName": "Frank",
+      "lastName": "Miller",
+      "phone": "6666666666",
+      "email": "frank.miller@premiumhousing.bg",
+      "salary": 6000.00,
+      "companyIndex": 2
+    },
+    {
+      "firstName": "Grace",
+      "lastName": "Wilson",
+      "phone": "7777777777",
+      "email": "grace.wilson@premiumhousing.bg",
+      "salary": 5600.00,
+      "companyIndex": 2
+    }
+  ],
+  "buildings": [
+    {
+      "address": "123 Main Street, Sofia, Bulgaria",
+      "floors": 5,
+      "totalApartments": 20,
+      "builtArea": 2500.50,
+      "commonAreas": 500.25,
+      "hasElevator": true,
+      "pricePerSquareMeter": 1500.00,
+      "elevatorFeePerPerson": 25.50,
+      "petFeePerPet": 15.00,
+      "companyIndex": 0,
+      "employeeIndex": 0
+    },
+    {
+      "address": "456 Oak Avenue, Sofia, Bulgaria",
+      "floors": 3,
+      "totalApartments": 12,
+      "builtArea": 1800.00,
+      "commonAreas": 300.00,
+      "hasElevator": false,
+      "pricePerSquareMeter": 1200.00,
+      "elevatorFeePerPerson": 0.00,
+      "petFeePerPet": 12.00,
+      "companyIndex": 0,
+      "employeeIndex": 1
+    },
+    {
+      "address": "789 Pine Road, Sofia, Bulgaria",
+      "floors": 4,
+      "totalApartments": 16,
+      "builtArea": 2200.75,
+      "commonAreas": 400.50,
+      "hasElevator": true,
+      "pricePerSquareMeter": 1400.00,
+      "elevatorFeePerPerson": 20.00,
+      "petFeePerPet": 18.00,
+      "companyIndex": 0,
+      "employeeIndex": 2
+    },
+    {
+      "address": "321 Elm Street, Plovdiv, Bulgaria",
+      "floors": 6,
+      "totalApartments": 24,
+      "builtArea": 3000.00,
+      "commonAreas": 600.00,
+      "hasElevator": true,
+      "pricePerSquareMeter": 1600.00,
+      "elevatorFeePerPerson": 30.00,
+      "petFeePerPet": 20.00,
+      "companyIndex": 1,
+      "employeeIndex": 3
+    },
+    {
+      "address": "654 Maple Drive, Plovdiv, Bulgaria",
+      "floors": 2,
+      "totalApartments": 8,
+      "builtArea": 1200.00,
+      "commonAreas": 200.00,
+      "hasElevator": false,
+      "pricePerSquareMeter": 1100.00,
+      "elevatorFeePerPerson": 0.00,
+      "petFeePerPet": 10.00,
+      "companyIndex": 1,
+      "employeeIndex": 4
+    },
+    {
+      "address": "987 Cedar Lane, Varna, Bulgaria",
+      "floors": 7,
+      "totalApartments": 28,
+      "builtArea": 3500.25,
+      "commonAreas": 700.50,
+      "hasElevator": true,
+      "pricePerSquareMeter": 1700.00,
+      "elevatorFeePerPerson": 35.00,
+      "petFeePerPet": 25.00,
+      "companyIndex": 2,
+      "employeeIndex": 5
+    },
+    {
+      "address": "147 Birch Boulevard, Varna, Bulgaria",
+      "floors": 4,
+      "totalApartments": 16,
+      "builtArea": 2100.00,
+      "commonAreas": 350.00,
+      "hasElevator": true,
+      "pricePerSquareMeter": 1450.00,
+      "elevatorFeePerPerson": 22.00,
+      "petFeePerPet": 16.00,
+      "companyIndex": 2,
+      "employeeIndex": 6
+    }
+  ],
+  "residents": [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "age": 45,
+      "phone": "1000000001",
+      "email": "john.doe@example.com",
+      "usesElevator": true,
+      "buildingIndex": 0,
+      "apartmentNumber": 1
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "age": 42,
+      "phone": "1000000002",
+      "email": "jane.doe@example.com",
+      "usesElevator": true,
+      "buildingIndex": 0,
+      "apartmentNumber": 1
+    },
+    {
+      "firstName": "Mike",
+      "lastName": "Johnson",
+      "age": 35,
+      "phone": "1000000003",
+      "email": "mike.johnson@example.com",
+      "usesElevator": false,
+      "buildingIndex": 0,
+      "apartmentNumber": 2
+    },
+    {
+      "firstName": "Sarah",
+      "lastName": "Brown",
+      "age": 28,
+      "phone": "2000000001",
+      "email": "sarah.brown@example.com",
+      "usesElevator": false,
+      "buildingIndex": 1,
+      "apartmentNumber": 1
+    },
+    {
+      "firstName": "David",
+      "lastName": "Wilson",
+      "age": 50,
+      "phone": "3000000001",
+      "email": "david.wilson@example.com",
+      "usesElevator": true,
+      "buildingIndex": 2,
+      "apartmentNumber": 1
+    },
+    {
+      "firstName": "Emily",
+      "lastName": "Martinez",
+      "age": 32,
+      "phone": "4000000001",
+      "email": "emily.martinez@example.com",
+      "usesElevator": true,
+      "buildingIndex": 3,
+      "apartmentNumber": 1
+    },
+    {
+      "firstName": "Robert",
+      "lastName": "Taylor",
+      "age": 38,
+      "phone": "4000000002",
+      "email": "robert.taylor@example.com",
+      "usesElevator": false,
+      "buildingIndex": 3,
+      "apartmentNumber": 1
+    },
+    {
+      "firstName": "Lisa",
+      "lastName": "Anderson",
+      "age": 29,
+      "phone": "5000000001",
+      "email": "lisa.anderson@example.com",
+      "usesElevator": false,
+      "buildingIndex": 4,
+      "apartmentNumber": 1
+    },
+    {
+      "firstName": "James",
+      "lastName": "Thomas",
+      "age": 55,
+      "phone": "6000000001",
+      "email": "james.thomas@example.com",
+      "usesElevator": true,
+      "buildingIndex": 5,
+      "apartmentNumber": 1
+    },
+    {
+      "firstName": "Maria",
+      "lastName": "Jackson",
+      "age": 41,
+      "phone": "6000000002",
+      "email": "maria.jackson@example.com",
+      "usesElevator": true,
+      "buildingIndex": 5,
+      "apartmentNumber": 1
+    },
+    {
+      "firstName": "William",
+      "lastName": "White",
+      "age": 33,
+      "phone": "7000000001",
+      "email": "william.white@example.com",
+      "usesElevator": true,
+      "buildingIndex": 6,
+      "apartmentNumber": 1
+    },
+    {
+      "firstName": "Patricia",
+      "lastName": "Harris",
+      "age": 27,
+      "phone": "7000000002",
+      "email": "patricia.harris@example.com",
+      "usesElevator": false,
+      "buildingIndex": 6,
+      "apartmentNumber": 2
+    },
+    {
+      "firstName": "Richard",
+      "lastName": "Martin",
+      "age": 48,
+      "phone": "1000000004",
+      "email": "richard.martin@example.com",
+      "usesElevator": true,
+      "buildingIndex": 0,
+      "apartmentNumber": 3
+    },
+    {
+      "firstName": "Jennifer",
+      "lastName": "Thompson",
+      "age": 36,
+      "phone": "3000000002",
+      "email": "jennifer.thompson@example.com",
+      "usesElevator": false,
+      "buildingIndex": 2,
+      "apartmentNumber": 2
+    },
+    {
+      "firstName": "Charles",
+      "lastName": "Garcia",
+      "age": 44,
+      "phone": "4000000003",
+      "email": "charles.garcia@example.com",
+      "usesElevator": true,
+      "buildingIndex": 3,
+      "apartmentNumber": 2
+    }
+  ],
+  "fees": [
+    {
+      "buildingIndex": 0,
+      "apartmentNumber": 1,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": true,
+      "paidDate": "2024-01-15"
+    },
+    {
+      "buildingIndex": 0,
+      "apartmentNumber": 1,
+      "month": "FEBRUARY",
+      "year": 2024,
+      "isPaid": true,
+      "paidDate": "2024-02-10"
+    },
+    {
+      "buildingIndex": 0,
+      "apartmentNumber": 2,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": true,
+      "paidDate": "2024-01-20"
+    },
+    {
+      "buildingIndex": 0,
+      "apartmentNumber": 2,
+      "month": "FEBRUARY",
+      "year": 2024,
+      "isPaid": false
+    },
+    {
+      "buildingIndex": 0,
+      "apartmentNumber": 3,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": true,
+      "paidDate": "2024-01-18"
+    },
+    {
+      "buildingIndex": 1,
+      "apartmentNumber": 1,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": true,
+      "paidDate": "2024-01-12"
+    },
+    {
+      "buildingIndex": 2,
+      "apartmentNumber": 1,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": true,
+      "paidDate": "2024-01-22"
+    },
+    {
+      "buildingIndex": 2,
+      "apartmentNumber": 2,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": false
+    },
+    {
+      "buildingIndex": 3,
+      "apartmentNumber": 1,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": true,
+      "paidDate": "2024-01-14"
+    },
+    {
+      "buildingIndex": 3,
+      "apartmentNumber": 2,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": true,
+      "paidDate": "2024-01-16"
+    },
+    {
+      "buildingIndex": 4,
+      "apartmentNumber": 1,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": false
+    },
+    {
+      "buildingIndex": 5,
+      "apartmentNumber": 1,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": true,
+      "paidDate": "2024-01-19"
+    },
+    {
+      "buildingIndex": 6,
+      "apartmentNumber": 1,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": true,
+      "paidDate": "2024-01-21"
+    },
+    {
+      "buildingIndex": 6,
+      "apartmentNumber": 2,
+      "month": "JANUARY",
+      "year": 2024,
+      "isPaid": false
+    }
+  ]
+}
+

@@ -1,8 +1,10 @@
 package com.nbu.electronic_home_manager.employee.controller;
 
+import com.nbu.electronic_home_manager.employee.dto.EmployeeResponse;
 import com.nbu.electronic_home_manager.employee.dto.EmployeeWithBuildingsResponse;
 import com.nbu.electronic_home_manager.employee.dto.EditEmployeeRequest;
 import com.nbu.electronic_home_manager.employee.dto.RegisterEmployeeRequest;
+import com.nbu.electronic_home_manager.shared.dto.SummaryReport;
 import com.nbu.electronic_home_manager.employee.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -59,12 +61,23 @@ public class EmployeeController {
     }
 
     @GetMapping("/by-company/{companyId}/buildings")
-    public ResponseEntity<List<EmployeeWithBuildingsResponse>> getEmployeesWithBuildingsByCompany(
+    public ResponseEntity<SummaryReport<EmployeeWithBuildingsResponse>> getEmployeesWithBuildingsByCompany(
             @PathVariable UUID companyId) {
 
         List<EmployeeWithBuildingsResponse> employees = employeeService.getEmployeesWithBuildingsByCompany(companyId);
-        return ResponseEntity.ok(employees);
+        SummaryReport<EmployeeWithBuildingsResponse> report = SummaryReport.<EmployeeWithBuildingsResponse>builder()
+                .totalCount((long) employees.size())
+                .items(employees)
+                .build();
+        return ResponseEntity.ok(report);
 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EmployeeResponse>> getAllEmployees(
+            @RequestParam(required = false, defaultValue = "") String sortBy) {
+        List<EmployeeResponse> employees = employeeService.getAllEmployees(sortBy);
+        return ResponseEntity.ok(employees);
     }
 
 }

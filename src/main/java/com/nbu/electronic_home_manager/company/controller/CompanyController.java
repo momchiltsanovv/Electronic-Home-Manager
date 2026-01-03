@@ -1,5 +1,6 @@
 package com.nbu.electronic_home_manager.company.controller;
 
+import com.nbu.electronic_home_manager.company.dto.CompanyResponse;
 import com.nbu.electronic_home_manager.company.dto.EditCompanyRequest;
 import com.nbu.electronic_home_manager.company.dto.RegisterCompanyRequest;
 import com.nbu.electronic_home_manager.company.service.CompanyService;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -54,6 +56,13 @@ public class CompanyController {
         companyService.deleteCompany(id);
         return ResponseEntity.ok().build();
 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CompanyResponse>> getAllCompanies(
+            @RequestParam(required = false, defaultValue = "") String sortBy) {
+        List<CompanyResponse> companies = companyService.getAllCompanies(sortBy);
+        return ResponseEntity.ok(companies);
     }
 
 }

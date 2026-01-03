@@ -3,6 +3,7 @@ package com.nbu.electronic_home_manager.building.service;
 
 import com.nbu.electronic_home_manager.apartment.model.Apartment;
 import com.nbu.electronic_home_manager.apartment.repository.ApartmentRepository;
+import com.nbu.electronic_home_manager.building.dto.BuildingResponse;
 import com.nbu.electronic_home_manager.building.dto.CreateBuildingRequest;
 import com.nbu.electronic_home_manager.building.dto.EditBuildingRequest;
 import com.nbu.electronic_home_manager.building.model.Building;
@@ -17,12 +18,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -80,7 +84,7 @@ public class BuildingService {
                                     .build();
 
         buildingRepository.save(building);
-        
+
         // Automatically create apartments for this building
         createApartmentsForBuilding(building);
         
@@ -157,5 +161,50 @@ public class BuildingService {
 
         buildingRepository.delete(optionalBuilding.get());
         log.info("Building with id {} has been deleted", buildingId);
+    }
+
+    public List<BuildingResponse> getAllBuildings(String sortBy) {
+        List<Building> buildings = buildingRepository.findAll();
+        
+        List<BuildingResponse> responses = buildings.stream()
+                .map(building -> {
+                    long ageInDays = calculateBuildingAge(building.getCreatedDate());
+                    return BuildingResponse.builder()
+                            .id(building.getId())
+                            .address(building.getAddress())
+                            .floors(building.getFloors())
+                            .totalApartments(building.getTotalApartments())
+                            .builtArea(building.getBuiltArea())
+                            .commonAreas(building.getCommonAreas())
+                            .hasElevator(building.getHasElevator())
+                            .pricePerSquareMeter(building.getPricePerSquareMeter())
+                            .elevatorFeePerPerson(building.getElevatorFeePerPerson())
+                            .petFeePerPet(building.getPetFeePerPet())
+                            .createdDate(building.getCreatedDate())
+                            .updatedDate(building.getUpdatedDate())
+                            .ageInDays(ageInDays)
+                            .build();
+                })
+                .collect(Collectors.toList());
+        
+        // Sort by address (name) or age
+        if ("name".equalsIgnoreCase(sortBy) || "name_asc".equalsIgnoreCase(sortBy)) {
+            responses.sort(Comparator.comparing(BuildingResponse::getAddress, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER)));
+        } else if ("name_desc".equalsIgnoreCase(sortBy)) {
+            responses.sort(Comparator.comparing(BuildingResponse::getAddress, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER)).reversed());
+        } else if ("age".equalsIgnoreCase(sortBy) || "age_asc".equalsIgnoreCase(sortBy)) {
+            responses.sort(Comparator.comparing(BuildingResponse::getAgeInDays, Comparator.nullsLast(Comparator.naturalOrder())));
+        } else if ("age_desc".equalsIgnoreCase(sortBy)) {
+            responses.sort(Comparator.comparing(BuildingResponse::getAgeInDays, Comparator.nullsLast(Comparator.reverseOrder())));
+        }
+        
+        return responses;
+    }
+    
+    private long calculateBuildingAge(LocalDate createdDate) {
+        if (createdDate == null) {
+            return 0;
+        }
+        return ChronoUnit.DAYS.between(createdDate, LocalDate.now());
     }
 }

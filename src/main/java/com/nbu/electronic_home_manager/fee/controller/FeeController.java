@@ -4,6 +4,7 @@ import com.nbu.electronic_home_manager.fee.dto.CreateFeeRequest;
 import com.nbu.electronic_home_manager.fee.dto.FeeResponse;
 import com.nbu.electronic_home_manager.fee.dto.MarkFeePaidRequest;
 import com.nbu.electronic_home_manager.fee.service.FeeService;
+import com.nbu.electronic_home_manager.shared.dto.AmountReport;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +36,11 @@ public class FeeController {
     }
 
     @PutMapping("/{id}/pay")
-    public ResponseEntity<FeeResponse> markFeePaid(@PathVariable UUID id,
-                                                   @Valid @RequestBody MarkFeePaidRequest request,
-                                                   BindingResult result) {
-        if (result.hasErrors()) {
-            throw new IllegalArgumentException("Incorrect data for marking fee as paid");
+    public ResponseEntity<FeeResponse> payFee(@PathVariable UUID id,
+                                              @RequestBody(required = false) MarkFeePaidRequest request) {
+        // If no request body provided, create an empty request (paidDate will default to current date)
+        if (request == null) {
+            request = new MarkFeePaidRequest();
         }
 
         FeeResponse feeResponse = feeService.markFeePaid(id, request);
@@ -68,6 +69,44 @@ public class FeeController {
     public ResponseEntity<Void> deleteFee(@PathVariable UUID id) {
         feeService.deleteFee(id);
         return ResponseEntity.ok().build();
+    }
+
+    // Reports for amounts to be paid (unpaid fees)
+    @GetMapping("/reports/unpaid/company/{companyId}")
+    public ResponseEntity<AmountReport> getUnpaidAmountsByCompany(@PathVariable UUID companyId) {
+        AmountReport report = feeService.getUnpaidAmountsByCompany(companyId);
+        return ResponseEntity.ok(report);
+    }
+
+    @GetMapping("/reports/unpaid/building/{buildingId}")
+    public ResponseEntity<AmountReport> getUnpaidAmountsByBuilding(@PathVariable UUID buildingId) {
+        AmountReport report = feeService.getUnpaidAmountsByBuilding(buildingId);
+        return ResponseEntity.ok(report);
+    }
+
+    @GetMapping("/reports/unpaid/employee/{employeeId}")
+    public ResponseEntity<AmountReport> getUnpaidAmountsByEmployee(@PathVariable UUID employeeId) {
+        AmountReport report = feeService.getUnpaidAmountsByEmployee(employeeId);
+        return ResponseEntity.ok(report);
+    }
+
+    // Reports for amounts paid
+    @GetMapping("/reports/paid/company/{companyId}")
+    public ResponseEntity<AmountReport> getPaidAmountsByCompany(@PathVariable UUID companyId) {
+        AmountReport report = feeService.getPaidAmountsByCompany(companyId);
+        return ResponseEntity.ok(report);
+    }
+
+    @GetMapping("/reports/paid/building/{buildingId}")
+    public ResponseEntity<AmountReport> getPaidAmountsByBuilding(@PathVariable UUID buildingId) {
+        AmountReport report = feeService.getPaidAmountsByBuilding(buildingId);
+        return ResponseEntity.ok(report);
+    }
+
+    @GetMapping("/reports/paid/employee/{employeeId}")
+    public ResponseEntity<AmountReport> getPaidAmountsByEmployee(@PathVariable UUID employeeId) {
+        AmountReport report = feeService.getPaidAmountsByEmployee(employeeId);
+        return ResponseEntity.ok(report);
     }
 }
 

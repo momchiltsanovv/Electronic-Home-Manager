@@ -1,5 +1,6 @@
 package com.nbu.electronic_home_manager.building.controller;
 
+import com.nbu.electronic_home_manager.building.dto.BuildingResponse;
 import com.nbu.electronic_home_manager.building.dto.CreateBuildingRequest;
 import com.nbu.electronic_home_manager.building.dto.EditBuildingRequest;
 import com.nbu.electronic_home_manager.building.service.BuildingService;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,7 +25,7 @@ public class BuildingController {
 
     @PostMapping("/creation")
     public ResponseEntity<Void> createBuilding(@Valid @RequestBody CreateBuildingRequest request,
-                                              BindingResult result) {
+                            BindingResult result) {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException("Incorrect data for creating building");
@@ -41,7 +43,7 @@ public class BuildingController {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException("Incorrect data for editing building");
-        }
+    }
 
         buildingService.editBuilding(id, request);
         return ResponseEntity.ok().build();
@@ -54,6 +56,13 @@ public class BuildingController {
         buildingService.deleteBuilding(id);
         return ResponseEntity.ok().build();
 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<BuildingResponse>> getAllBuildings(
+            @RequestParam(required = false, defaultValue = "") String sortBy) {
+        List<BuildingResponse> buildings = buildingService.getAllBuildings(sortBy);
+        return ResponseEntity.ok(buildings);
     }
 
 }

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @Builder
@@ -28,6 +30,11 @@ public class EditResidentRequest {
     private String email;
 
     private Boolean usesElevator;
+
+    // Optional: Reassign resident to a different apartment
+    // If provided, both buildingId and apartmentId must be provided
+    private UUID buildingId;
+    private UUID apartmentId;
 
 }
 

@@ -2,6 +2,8 @@ package com.nbu.electronic_home_manager.resident.controller;
 
 import com.nbu.electronic_home_manager.resident.dto.EditResidentRequest;
 import com.nbu.electronic_home_manager.resident.dto.RegisterResidentRequest;
+import com.nbu.electronic_home_manager.resident.dto.ResidentResponse;
+import com.nbu.electronic_home_manager.shared.dto.SummaryReport;
 import com.nbu.electronic_home_manager.resident.service.ResidentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -54,6 +57,25 @@ public class ResidentController {
         residentService.deleteResident(id);
         return ResponseEntity.ok().build();
 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ResidentResponse>> getAllResidents(
+            @RequestParam(required = false, defaultValue = "") String sortBy) {
+        List<ResidentResponse> residents = residentService.getAllResidents(sortBy);
+        return ResponseEntity.ok(residents);
+    }
+
+    @GetMapping("/building/{buildingId}")
+    public ResponseEntity<SummaryReport<ResidentResponse>> getResidentsByBuilding(
+            @PathVariable UUID buildingId,
+            @RequestParam(required = false, defaultValue = "") String sortBy) {
+        List<ResidentResponse> residents = residentService.getResidentsByBuilding(buildingId, sortBy);
+        SummaryReport<ResidentResponse> report = SummaryReport.<ResidentResponse>builder()
+                .totalCount((long) residents.size())
+                .items(residents)
+                .build();
+        return ResponseEntity.ok(report);
     }
 
 }
