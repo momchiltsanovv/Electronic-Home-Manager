@@ -17,6 +17,7 @@ import com.nbu.electronic_home_manager.fee.dto.CreateFeeRequest;
 import com.nbu.electronic_home_manager.fee.dto.FeeResponse;
 import com.nbu.electronic_home_manager.fee.dto.MarkFeePaidRequest;
 import com.nbu.electronic_home_manager.shared.dto.AmountReport;
+import com.nbu.electronic_home_manager.shared.dto.AmountSummaryReport;
 import com.nbu.electronic_home_manager.fee.model.Fee;
 import com.nbu.electronic_home_manager.fee.repository.FeeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -218,6 +219,28 @@ public class FeeService {
                 .build();
     }
 
+    public AmountSummaryReport<FeeResponse> getUnpaidAmountsByCompanyWithDetails(UUID companyId) {
+        Optional<Company> optionalCompany = companyRepository.findById(companyId);
+        if (optionalCompany.isEmpty()) {
+            throw new CompanyDoesNotExistException("Company with id " + companyId + " does not exist");
+        }
+        
+        List<Fee> unpaidFees = feeRepository.findUnpaidFeesByCompanyId(companyId);
+        BigDecimal totalAmount = unpaidFees.stream()
+                .map(Fee::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        List<FeeResponse> feeResponses = unpaidFees.stream()
+                .map(this::mapToFeeResponse)
+                .collect(Collectors.toList());
+        
+        return AmountSummaryReport.<FeeResponse>builder()
+                .totalAmount(totalAmount)
+                .totalCount((long) unpaidFees.size())
+                .items(feeResponses)
+                .build();
+    }
+
     public AmountReport getPaidAmountsByCompany(UUID companyId) {
         Optional<Company> optionalCompany = companyRepository.findById(companyId);
         if (optionalCompany.isEmpty()) {
@@ -234,6 +257,28 @@ public class FeeService {
                 .name(optionalCompany.get().getName())
                 .totalAmount(totalAmount)
                 .feeCount((long) paidFees.size())
+                .build();
+    }
+
+    public AmountSummaryReport<FeeResponse> getPaidAmountsByCompanyWithDetails(UUID companyId) {
+        Optional<Company> optionalCompany = companyRepository.findById(companyId);
+        if (optionalCompany.isEmpty()) {
+            throw new CompanyDoesNotExistException("Company with id " + companyId + " does not exist");
+        }
+        
+        List<Fee> paidFees = feeRepository.findPaidFeesByCompanyId(companyId);
+        BigDecimal totalAmount = paidFees.stream()
+                .map(Fee::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        List<FeeResponse> feeResponses = paidFees.stream()
+                .map(this::mapToFeeResponse)
+                .collect(Collectors.toList());
+        
+        return AmountSummaryReport.<FeeResponse>builder()
+                .totalAmount(totalAmount)
+                .totalCount((long) paidFees.size())
+                .items(feeResponses)
                 .build();
     }
 
@@ -256,6 +301,28 @@ public class FeeService {
                 .build();
     }
 
+    public AmountSummaryReport<FeeResponse> getUnpaidAmountsByBuildingWithDetails(UUID buildingId) {
+        Optional<Building> optionalBuilding = buildingRepository.findById(buildingId);
+        if (optionalBuilding.isEmpty()) {
+            throw new BuildingDoesNotExistException("Building with id " + buildingId + " does not exist");
+        }
+        
+        List<Fee> unpaidFees = feeRepository.findUnpaidFeesByBuildingId(buildingId);
+        BigDecimal totalAmount = unpaidFees.stream()
+                .map(Fee::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        List<FeeResponse> feeResponses = unpaidFees.stream()
+                .map(this::mapToFeeResponse)
+                .collect(Collectors.toList());
+        
+        return AmountSummaryReport.<FeeResponse>builder()
+                .totalAmount(totalAmount)
+                .totalCount((long) unpaidFees.size())
+                .items(feeResponses)
+                .build();
+    }
+
     public AmountReport getPaidAmountsByBuilding(UUID buildingId) {
         Optional<Building> optionalBuilding = buildingRepository.findById(buildingId);
         if (optionalBuilding.isEmpty()) {
@@ -272,6 +339,28 @@ public class FeeService {
                 .name(optionalBuilding.get().getAddress())
                 .totalAmount(totalAmount)
                 .feeCount((long) paidFees.size())
+                .build();
+    }
+
+    public AmountSummaryReport<FeeResponse> getPaidAmountsByBuildingWithDetails(UUID buildingId) {
+        Optional<Building> optionalBuilding = buildingRepository.findById(buildingId);
+        if (optionalBuilding.isEmpty()) {
+            throw new BuildingDoesNotExistException("Building with id " + buildingId + " does not exist");
+        }
+        
+        List<Fee> paidFees = feeRepository.findPaidFeesByBuildingId(buildingId);
+        BigDecimal totalAmount = paidFees.stream()
+                .map(Fee::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        List<FeeResponse> feeResponses = paidFees.stream()
+                .map(this::mapToFeeResponse)
+                .collect(Collectors.toList());
+        
+        return AmountSummaryReport.<FeeResponse>builder()
+                .totalAmount(totalAmount)
+                .totalCount((long) paidFees.size())
+                .items(feeResponses)
                 .build();
     }
 
@@ -297,6 +386,28 @@ public class FeeService {
                 .build();
     }
 
+    public AmountSummaryReport<FeeResponse> getUnpaidAmountsByEmployeeWithDetails(UUID employeeId) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        if (optionalEmployee.isEmpty()) {
+            throw new EmployeeDoesNotExistException("Employee with id " + employeeId + " does not exist");
+        }
+        
+        List<Fee> unpaidFees = feeRepository.findUnpaidFeesByEmployeeId(employeeId);
+        BigDecimal totalAmount = unpaidFees.stream()
+                .map(Fee::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        List<FeeResponse> feeResponses = unpaidFees.stream()
+                .map(this::mapToFeeResponse)
+                .collect(Collectors.toList());
+        
+        return AmountSummaryReport.<FeeResponse>builder()
+                .totalAmount(totalAmount)
+                .totalCount((long) unpaidFees.size())
+                .items(feeResponses)
+                .build();
+    }
+
     public AmountReport getPaidAmountsByEmployee(UUID employeeId) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if (optionalEmployee.isEmpty()) {
@@ -316,6 +427,28 @@ public class FeeService {
                 .name(employeeName)
                 .totalAmount(totalAmount)
                 .feeCount((long) paidFees.size())
+                .build();
+    }
+
+    public AmountSummaryReport<FeeResponse> getPaidAmountsByEmployeeWithDetails(UUID employeeId) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        if (optionalEmployee.isEmpty()) {
+            throw new EmployeeDoesNotExistException("Employee with id " + employeeId + " does not exist");
+        }
+        
+        List<Fee> paidFees = feeRepository.findPaidFeesByEmployeeId(employeeId);
+        BigDecimal totalAmount = paidFees.stream()
+                .map(Fee::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        List<FeeResponse> feeResponses = paidFees.stream()
+                .map(this::mapToFeeResponse)
+                .collect(Collectors.toList());
+        
+        return AmountSummaryReport.<FeeResponse>builder()
+                .totalAmount(totalAmount)
+                .totalCount((long) paidFees.size())
+                .items(feeResponses)
                 .build();
     }
 }

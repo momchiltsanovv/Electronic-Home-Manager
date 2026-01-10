@@ -88,8 +88,35 @@ DELETE /employees/{id}
 ```
 
 ### Get Employees with Buildings by Company (Summary Report)
+**Report Type:** Properties serviced by each employee in a given company
+
 ```bash
 GET /employees/by-company/{companyId}/buildings
+```
+
+**Response (Summary + Detailed List):**
+```json
+{
+  "totalCount": 3,
+  "items": [
+    {
+      "id": "employee-uuid",
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "phone": "1234567890",
+      "email": "alice@company.com",
+      "salary": 5000.00,
+      "buildings": [
+        {
+          "id": "building-uuid",
+          "address": "123 Main Street, Sofia",
+          "floors": 5,
+          "totalApartments": 20
+        }
+      ]
+    }
+  ]
+}
 ```
 
 **Response includes summary with total count and list:**
@@ -273,7 +300,9 @@ GET /residents?sortBy=age_desc
 - `age_desc` - Sort by age descending
 - No `sortBy` parameter - Returns residents without sorting
 
-### Get Residents in a Building (with Sorting)
+### Get Residents in a Building (Summary Report with Sorting)
+**Report Type:** Residents in a building
+
 ```bash
 GET /residents/building/{buildingId}?sortBy=name
 GET /residents/building/{buildingId}?sortBy=name_asc
@@ -289,6 +318,25 @@ GET /residents/building/{buildingId}?sortBy=age_desc
 - `age` or `age_asc` - Sort by age ascending
 - `age_desc` - Sort by age descending
 - No `sortBy` parameter - Returns residents without sorting
+
+**Response (Summary + Detailed List):**
+```json
+{
+  "totalCount": 5,
+  "items": [
+    {
+      "id": "resident-uuid",
+      "firstName": "John",
+      "lastName": "Doe",
+      "age": 35,
+      "phone": "1234567890",
+      "email": "john@example.com",
+      "usesElevator": true,
+      "apartmentNumbers": [101, 102]
+    }
+  ]
+}
+```
 
 **Note:** Returns all unique residents living in any apartment within the specified building. Each resident response includes a list of apartment numbers where they live in that building.
 
@@ -351,23 +399,25 @@ DELETE /apartments/{id}
 ```
 
 ### Get Apartments in a Building (Summary Report)
+**Report Type:** Apartments in a building
+
 ```bash
 GET /apartments/building/{buildingId}
 ```
 
-**Response includes summary with total count and list:**
+**Response (Summary + Detailed List):**
 ```json
 {
   "totalCount": 20,
   "items": [
     {
-      "id": "...",
+      "id": "apartment-uuid",
       "number": 1,
       "floor": 1,
       "area": 100.0,
-      "ownerId": "...",
+      "ownerId": "resident-uuid",
       "ownerName": "John Doe",
-      "residentIds": ["..."],
+      "residentIds": ["resident-uuid-1", "resident-uuid-2"],
       "residentCount": 2
     }
   ]
@@ -436,20 +486,47 @@ DELETE /fees/{id}
 
 ## Reports
 
-### Amounts to be Paid (Unpaid Fees)
+All reports return **Summary and Detailed** information:
+- **Summary**: Total count and/or total amount
+- **Detailed**: Complete list of items
+
+### Report Types
+
+1. **Properties serviced by each employee in a given company** - Returns employees with their assigned buildings
+2. **Apartments in a building** - Returns all apartments in a specific building
+3. **Residents in a building** - Returns all residents in a specific building
+4. **Amounts to be paid (unpaid fees)** - Returns unpaid fees by company, building, or employee
+5. **Amounts paid** - Returns paid fees by company, building, or employee
+
+---
+
+### Amounts to be Paid (Unpaid Fees) - Summary and Detailed Report
 
 #### By Company
 ```bash
 GET /fees/reports/unpaid/company/{companyId}
 ```
 
-**Response:**
+**Response (Summary + Detailed List):**
 ```json
 {
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "name": "Acme Corporation",
   "totalAmount": 15000.50,
-  "feeCount": 45
+  "totalCount": 45,
+  "items": [
+    {
+      "id": "fee-uuid-1",
+      "apartmentId": "apartment-uuid-1",
+      "apartmentNumber": 101,
+      "month": "JANUARY",
+      "year": 2024,
+      "baseAmount": 300.00,
+      "elevatorFee": 25.50,
+      "petFee": 15.00,
+      "totalAmount": 340.50,
+      "isPaid": false,
+      "paidDate": null
+    }
+  ]
 }
 ```
 
@@ -458,13 +535,26 @@ GET /fees/reports/unpaid/company/{companyId}
 GET /fees/reports/unpaid/building/{buildingId}
 ```
 
-**Response:**
+**Response (Summary + Detailed List):**
 ```json
 {
-  "id": "660e8400-e29b-41d4-a716-446655440001",
-  "name": "123 Main Street, Sofia",
   "totalAmount": 3500.25,
-  "feeCount": 12
+  "totalCount": 12,
+  "items": [
+    {
+      "id": "fee-uuid-1",
+      "apartmentId": "apartment-uuid-1",
+      "apartmentNumber": 101,
+      "month": "JANUARY",
+      "year": 2024,
+      "baseAmount": 300.00,
+      "elevatorFee": 25.50,
+      "petFee": 15.00,
+      "totalAmount": 340.50,
+      "isPaid": false,
+      "paidDate": null
+    }
+  ]
 }
 ```
 
@@ -473,30 +563,56 @@ GET /fees/reports/unpaid/building/{buildingId}
 GET /fees/reports/unpaid/employee/{employeeId}
 ```
 
-**Response:**
+**Response (Summary + Detailed List):**
 ```json
 {
-  "id": "770e8400-e29b-41d4-a716-446655440002",
-  "name": "Alice Johnson",
   "totalAmount": 8500.75,
-  "feeCount": 28
+  "totalCount": 28,
+  "items": [
+    {
+      "id": "fee-uuid-1",
+      "apartmentId": "apartment-uuid-1",
+      "apartmentNumber": 101,
+      "month": "JANUARY",
+      "year": 2024,
+      "baseAmount": 300.00,
+      "elevatorFee": 25.50,
+      "petFee": 15.00,
+      "totalAmount": 340.50,
+      "isPaid": false,
+      "paidDate": null
+    }
+  ]
 }
 ```
 
-### Amounts Paid
+### Amounts Paid - Summary and Detailed Report
 
 #### By Company
 ```bash
 GET /fees/reports/paid/company/{companyId}
 ```
 
-**Response:**
+**Response (Summary + Detailed List):**
 ```json
 {
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "name": "Acme Corporation",
   "totalAmount": 45000.00,
-  "feeCount": 135
+  "totalCount": 135,
+  "items": [
+    {
+      "id": "fee-uuid-2",
+      "apartmentId": "apartment-uuid-2",
+      "apartmentNumber": 102,
+      "month": "JANUARY",
+      "year": 2024,
+      "baseAmount": 300.00,
+      "elevatorFee": 25.50,
+      "petFee": 0.00,
+      "totalAmount": 325.50,
+      "isPaid": true,
+      "paidDate": "2024-01-15"
+    }
+  ]
 }
 ```
 
@@ -505,13 +621,26 @@ GET /fees/reports/paid/company/{companyId}
 GET /fees/reports/paid/building/{buildingId}
 ```
 
-**Response:**
+**Response (Summary + Detailed List):**
 ```json
 {
-  "id": "660e8400-e29b-41d4-a716-446655440001",
-  "name": "123 Main Street, Sofia",
   "totalAmount": 10500.00,
-  "feeCount": 35
+  "totalCount": 35,
+  "items": [
+    {
+      "id": "fee-uuid-2",
+      "apartmentId": "apartment-uuid-2",
+      "apartmentNumber": 102,
+      "month": "JANUARY",
+      "year": 2024,
+      "baseAmount": 300.00,
+      "elevatorFee": 25.50,
+      "petFee": 0.00,
+      "totalAmount": 325.50,
+      "isPaid": true,
+      "paidDate": "2024-01-15"
+    }
+  ]
 }
 ```
 
@@ -520,13 +649,26 @@ GET /fees/reports/paid/building/{buildingId}
 GET /fees/reports/paid/employee/{employeeId}
 ```
 
-**Response:**
+**Response (Summary + Detailed List):**
 ```json
 {
-  "id": "770e8400-e29b-41d4-a716-446655440002",
-  "name": "Alice Johnson",
   "totalAmount": 25000.00,
-  "feeCount": 82
+  "totalCount": 82,
+  "items": [
+    {
+      "id": "fee-uuid-2",
+      "apartmentId": "apartment-uuid-2",
+      "apartmentNumber": 102,
+      "month": "JANUARY",
+      "year": 2024,
+      "baseAmount": 300.00,
+      "elevatorFee": 25.50,
+      "petFee": 0.00,
+      "totalAmount": 325.50,
+      "isPaid": true,
+      "paidDate": "2024-01-15"
+    }
+  ]
 }
 ```
 

@@ -4,7 +4,7 @@ import com.nbu.electronic_home_manager.fee.dto.CreateFeeRequest;
 import com.nbu.electronic_home_manager.fee.dto.FeeResponse;
 import com.nbu.electronic_home_manager.fee.dto.MarkFeePaidRequest;
 import com.nbu.electronic_home_manager.fee.service.FeeService;
-import com.nbu.electronic_home_manager.shared.dto.AmountReport;
+import com.nbu.electronic_home_manager.shared.dto.AmountSummaryReport;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,41 +71,41 @@ public class FeeController {
         return ResponseEntity.ok().build();
     }
 
-    // Reports for amounts to be paid (unpaid fees)
+    // Reports for amounts to be paid (unpaid fees) - Summary and detailed
     @GetMapping("/reports/unpaid/company/{companyId}")
-    public ResponseEntity<AmountReport> getUnpaidAmountsByCompany(@PathVariable UUID companyId) {
-        AmountReport report = feeService.getUnpaidAmountsByCompany(companyId);
+    public ResponseEntity<AmountSummaryReport<FeeResponse>> getUnpaidAmountsByCompany(@PathVariable UUID companyId) {
+        AmountSummaryReport<FeeResponse> report = feeService.getUnpaidAmountsByCompanyWithDetails(companyId);
         return ResponseEntity.ok(report);
     }
 
     @GetMapping("/reports/unpaid/building/{buildingId}")
-    public ResponseEntity<AmountReport> getUnpaidAmountsByBuilding(@PathVariable UUID buildingId) {
-        AmountReport report = feeService.getUnpaidAmountsByBuilding(buildingId);
+    public ResponseEntity<AmountSummaryReport<FeeResponse>> getUnpaidAmountsByBuilding(@PathVariable UUID buildingId) {
+        AmountSummaryReport<FeeResponse> report = feeService.getUnpaidAmountsByBuildingWithDetails(buildingId);
         return ResponseEntity.ok(report);
     }
 
     @GetMapping("/reports/unpaid/employee/{employeeId}")
-    public ResponseEntity<AmountReport> getUnpaidAmountsByEmployee(@PathVariable UUID employeeId) {
-        AmountReport report = feeService.getUnpaidAmountsByEmployee(employeeId);
+    public ResponseEntity<AmountSummaryReport<FeeResponse>> getUnpaidAmountsByEmployee(@PathVariable UUID employeeId) {
+        AmountSummaryReport<FeeResponse> report = feeService.getUnpaidAmountsByEmployeeWithDetails(employeeId);
         return ResponseEntity.ok(report);
     }
 
-    // Reports for amounts paid
+    // Reports for amounts paid - Summary and detailed
     @GetMapping("/reports/paid/company/{companyId}")
-    public ResponseEntity<AmountReport> getPaidAmountsByCompany(@PathVariable UUID companyId) {
-        AmountReport report = feeService.getPaidAmountsByCompany(companyId);
+    public ResponseEntity<AmountSummaryReport<FeeResponse>> getPaidAmountsByCompany(@PathVariable UUID companyId) {
+        AmountSummaryReport<FeeResponse> report = feeService.getPaidAmountsByCompanyWithDetails(companyId);
         return ResponseEntity.ok(report);
     }
 
     @GetMapping("/reports/paid/building/{buildingId}")
-    public ResponseEntity<AmountReport> getPaidAmountsByBuilding(@PathVariable UUID buildingId) {
-        AmountReport report = feeService.getPaidAmountsByBuilding(buildingId);
+    public ResponseEntity<AmountSummaryReport<FeeResponse>> getPaidAmountsByBuilding(@PathVariable UUID buildingId) {
+        AmountSummaryReport<FeeResponse> report = feeService.getPaidAmountsByBuildingWithDetails(buildingId);
         return ResponseEntity.ok(report);
     }
 
     @GetMapping("/reports/paid/employee/{employeeId}")
-    public ResponseEntity<AmountReport> getPaidAmountsByEmployee(@PathVariable UUID employeeId) {
-        AmountReport report = feeService.getPaidAmountsByEmployee(employeeId);
+    public ResponseEntity<AmountSummaryReport<FeeResponse>> getPaidAmountsByEmployee(@PathVariable UUID employeeId) {
+        AmountSummaryReport<FeeResponse> report = feeService.getPaidAmountsByEmployeeWithDetails(employeeId);
         return ResponseEntity.ok(report);
     }
 }

@@ -831,25 +831,165 @@ curl -X GET "http://localhost:8080/residents?sortBy=age_desc"
 ```
 
 ### Test Reports
+
+All reports return **Summary and Detailed** information:
+- **Summary**: Total count and/or total amount
+- **Detailed**: Complete list of items
+
+#### a. Properties Serviced by Each Employee in a Given Company
 ```bash
-# Employees with buildings by company
 curl -X GET http://localhost:8080/employees/by-company/COMPANY_1_ID/buildings
+```
 
-# Apartments in building
+**Response Structure:**
+```json
+{
+  "totalCount": 3,
+  "items": [
+    {
+      "id": "employee-uuid",
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "phone": "1234567890",
+      "email": "alice@company.com",
+      "salary": 5000.00,
+      "buildings": [
+        {
+          "id": "building-uuid",
+          "address": "123 Main Street, Sofia",
+          "floors": 5,
+          "totalApartments": 20
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### b. Apartments in a Building
+```bash
 curl -X GET http://localhost:8080/apartments/building/BUILDING_1_ID
+```
 
-# Residents in building
+**Response Structure:**
+```json
+{
+  "totalCount": 20,
+  "items": [
+    {
+      "id": "apartment-uuid",
+      "number": 101,
+      "floor": 1,
+      "area": 75.50,
+      "ownerId": "resident-uuid",
+      "residentIds": ["resident-uuid-1", "resident-uuid-2"]
+    }
+  ]
+}
+```
+
+#### c. Residents in a Building
+```bash
 curl -X GET "http://localhost:8080/residents/building/BUILDING_1_ID?sortBy=name_asc"
+```
 
-# Unpaid amounts
+**Response Structure:**
+```json
+{
+  "totalCount": 5,
+  "items": [
+    {
+      "id": "resident-uuid",
+      "firstName": "John",
+      "lastName": "Doe",
+      "age": 35,
+      "phone": "1234567890",
+      "email": "john@example.com",
+      "usesElevator": true,
+      "apartmentNumbers": [101, 102]
+    }
+  ]
+}
+```
+
+#### d. Amounts to be Paid (Unpaid Fees)
+
+**By Company:**
+```bash
 curl -X GET http://localhost:8080/fees/reports/unpaid/company/COMPANY_1_ID
-curl -X GET http://localhost:8080/fees/reports/unpaid/building/BUILDING_1_ID
-curl -X GET http://localhost:8080/fees/reports/unpaid/employee/EMPLOYEE_1_ID
+```
 
-# Paid amounts
+**By Building:**
+```bash
+curl -X GET http://localhost:8080/fees/reports/unpaid/building/BUILDING_1_ID
+```
+
+**By Employee:**
+```bash
+curl -X GET http://localhost:8080/fees/reports/unpaid/employee/EMPLOYEE_1_ID
+```
+
+**Response Structure:**
+```json
+{
+  "totalAmount": 15000.50,
+  "totalCount": 45,
+  "items": [
+    {
+      "id": "fee-uuid",
+      "apartmentId": "apartment-uuid",
+      "apartmentNumber": 101,
+      "month": "JANUARY",
+      "year": 2024,
+      "baseAmount": 300.00,
+      "elevatorFee": 25.50,
+      "petFee": 15.00,
+      "totalAmount": 340.50,
+      "isPaid": false,
+      "paidDate": null
+    }
+  ]
+}
+```
+
+#### e. Amounts Paid
+
+**By Company:**
+```bash
 curl -X GET http://localhost:8080/fees/reports/paid/company/COMPANY_1_ID
+```
+
+**By Building:**
+```bash
 curl -X GET http://localhost:8080/fees/reports/paid/building/BUILDING_1_ID
+```
+
+**By Employee:**
+```bash
 curl -X GET http://localhost:8080/fees/reports/paid/employee/EMPLOYEE_1_ID
+```
+
+**Response Structure:**
+```json
+{
+  "totalAmount": 45000.00,
+  "totalCount": 135,
+  "items": [
+    {
+      "id": "fee-uuid",
+      "apartmentId": "apartment-uuid",
+      "apartmentNumber": 102,
+      "month": "JANUARY",
+      "year": 2024,
+      "baseAmount": 300.00,
+      "elevatorFee": 25.50,
+      "petFee": 0.00,
+      "totalAmount": 325.50,
+      "isPaid": true,
+      "paidDate": "2024-01-15"
+    }
+  ]
+}
 ```
 
 ---
@@ -864,4 +1004,5 @@ After importing, you'll have:
 - **14 Fees** (10 paid, 4 unpaid)
 
 This provides comprehensive test data for all features!
+
 
